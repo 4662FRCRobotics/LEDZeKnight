@@ -14,6 +14,7 @@
                 "limitSymbolsToIncludedHeaders": false
             },
             "includePath": [
+                "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\libraries\\Wire\\src",
                 "C:\\Users\\trohl\\Documents\\Arduino\\libraries\\FastLED",
                 "C:\\Program Files (x86)\\Arduino\\tools\\**",
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\**",
