@@ -1,6 +1,6 @@
 {
     "board": "arduino:avr:uno",
-    "port": "COM10",
+    "port": "COM12",
     "sketch": "LEDZeKnight.ino",
     "programmer": "ArduinoISP"
 }

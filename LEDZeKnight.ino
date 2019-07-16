@@ -1,4 +1,4 @@
-
+/*
 #include <bitswap.h>
 #include <chipsets.h>
 #include <color.h>
@@ -26,6 +26,7 @@
 #include <pixeltypes.h>
 #include <platforms.h>
 #include <power_mgt.h>
+*/
 
 //Some light chase hacks for the AM-2640 5V, Addressable LED strips http://www.andymark.com/product-p/am-2640.htm based on the WS2801 chipset
 //We ran this demo off of our AM-2287 Arduino Ethernet http://www.andymark.com/product-p/am-2287.htm
@@ -62,6 +63,7 @@
 //#include "FastSPI_LED2.h"
 //CSK 3/17/2014 FastSPI library has been updated.  The new header file name is just FastLED.h. FastSPI_LED2.h is now just a shell with an include for FastLED.h
 #include "FastLED.h"
+#include "Wire.h"
 #define LED_PIN 5
 #define LED_PIN2 6
 #define COLOR_ORDER GRB
@@ -83,7 +85,10 @@ const int blueSwitch = 8;
 int LEDRotationCurr = 0;
 int redState;
 int blueState;
+int LEDmode;
+int AllianceColor;
 CRGB currColor;
+CRGB AllianceRGB;
 
 
 //This function is used to setup things like pins, Serial ports etc.
@@ -96,11 +101,14 @@ void setup()
 	FastLED.addLeds<CHIPSET, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 	FastLED.addLeds<CHIPSET, LED_PIN2, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 	LEDRotationCurr = 0;
+	Serial.begin(9600);
+	Wire.begin(8);
 }
 
 void loop()
 {
-	redState = digitalRead(redSwitch);
+	Wire.onReceive(dataReceived);
+	/*redState = digitalRead(redSwitch);
 	blueState = digitalRead(blueSwitch);
 	if (redState == LOW) {
 		color_chase(CRGB::Red, 75);
@@ -109,7 +117,72 @@ void loop()
 	} else {
 		FastLED.setBrightness(0);
 		FastLED.show();
+	}*/
+
+	switch (AllianceColor){
+		case 0: // INVALID
+			AllianceRGB = CRGB::Orange;
+			break;
+		case 1: // BLUE
+			AllianceRGB = CRGB::Blue;
+			break;
+		case 2: // RED
+			AllianceRGB = CRGB::Red;
+			break;
+		default: // SOMETHING BROKE
+			AllianceRGB = CRGB::HotPink;
 	}
+
+	switch (LEDmode)
+	{
+	case 0: // BROKE
+		color_chase(CRGB::White, 100);
+		break;
+	case 1: // DISABLED
+		color_chase(AllianceRGB, 125);	
+		break;
+	case 2: // AUTO
+		color_chase(AllianceRGB, 75);	
+		break;
+	case 3: // TELEOP
+		color_chase(AllianceRGB, 25);	
+		break;
+	default: // ANOTHER THING BROKE
+		color_chase(CRGB::Black, 75);
+		break;
+	}
+}
+
+void dataReceived(int howMany){
+	String LED = "";
+	while (Wire.available()){
+		char n = (char)Wire.read();
+		if (((int)n) > ((int)(' '))){
+			LED += n;
+		}
+	}
+
+	
+
+	if (LED == "DISABLED"){
+		LEDmode = 1;
+	}else if (LED == "AUTO"){
+		LEDmode = 2;
+	}else if (LED == "TELEOP"){
+		LEDmode = 3;
+	}else if (LED == "BLUE"){
+		AllianceColor = 1;
+	}else if (LED == "RED"){
+		AllianceColor = 2;
+	}else if (LED == "INVALID"){
+		AllianceColor = 0;
+	}else{
+		LEDmode = 0;
+		AllianceColor = 0;
+	}
+
+	
+
 }
 
 //These are the functions we have defined to do chase patterns.  They are actually called inside the  loop() above
