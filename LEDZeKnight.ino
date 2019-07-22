@@ -88,7 +88,7 @@ int blueState;
 int LEDmode;
 int AllianceColor;
 CRGB currColor;
-CRGB AllianceRGB;
+uint32_t AllianceRGB;
 
 
 //This function is used to setup things like pins, Serial ports etc.
@@ -130,13 +130,13 @@ void loop()
 			AllianceRGB = CRGB::Red;
 			break;
 		default: // SOMETHING BROKE
-			AllianceRGB = CRGB::HotPink;
+			AllianceRGB = CRGB::Green;
 	}
 
 	switch (LEDmode)
 	{
 	case 0: // BROKE
-		color_chase(CRGB::White, 100);
+		color_chase(AllianceRGB, 100);
 		break;
 	case 1: // DISABLED
 		color_chase(AllianceRGB, 125);	
@@ -148,7 +148,7 @@ void loop()
 		color_chase(AllianceRGB, 25);	
 		break;
 	default: // ANOTHER THING BROKE
-		color_chase(CRGB::Black, 75);
+		color_chase(AllianceRGB, 15);
 		break;
 	}
 }
@@ -162,26 +162,29 @@ void dataReceived(int howMany){
 		}
 	}
 
-	
+	int iDelimPos = LED.indexOf(",");
+	String ParmStatus = LED.substring(1,iDelimPos);
+	String ParmAlliance = LED.substring(iDelimPos+1);
 
-	if (LED == "DISABLED"){
+	if (ParmStatus == "DISABLED"){
 		LEDmode = 1;
-	}else if (LED == "AUTO"){
+	}else if (ParmStatus== "AUTO"){
 		LEDmode = 2;
-	}else if (LED == "TELEOP"){
-		LEDmode = 3;
-	}else if (LED == "BLUE"){
-		AllianceColor = 1;
-	}else if (LED == "RED"){
-		AllianceColor = 2;
-	}else if (LED == "INVALID"){
-		AllianceColor = 0;
+	}else if (ParmStatus == "TELEOP"){
+		LEDmode = 3; 
 	}else{
 		LEDmode = 0;
-		AllianceColor = 0;
 	}
 
-	
+	if (ParmAlliance == "BLUE"){
+		AllianceColor = 1;
+	}else if (ParmAlliance == "RED"){
+		AllianceColor = 2;
+	}else if (ParmAlliance == "INVALID"){
+		AllianceColor = 3;
+	}else{
+		AllianceColor = 0;
+	}
 
 }
 
