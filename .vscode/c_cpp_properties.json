@@ -4,25 +4,18 @@
             "name": "Win32",
             "browse": {
                 "path": [
-                    "C:\\Users\\trohl\\Documents\\Arduino\\libraries\\LcdBarGraphX\\src",
-                    "C:\\Users\\trohl\\Documents\\Arduino\\libraries\\MultiLcd\\src",
                     "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino",
                     "C:\\Program Files (x86)\\Arduino\\**",
-                    "C:\\Users\\trohl\\Documents\\Arduino\\libraries\\**",
                     "${workspaceFolder}"
                 ],
                 "limitSymbolsToIncludedHeaders": false
             },
             "includePath": [
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\libraries\\Wire\\src",
-                "C:\\Users\\trohl\\Documents\\Arduino\\libraries\\FastLED",
                 "C:\\Program Files (x86)\\Arduino\\tools\\**",
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\**",
-                "C:\\Users\\trohl\\Documents\\Arduino\\libraries\\LcdBarGraphX\\src",
-                "C:\\Users\\trohl\\Documents\\Arduino\\libraries\\MultiLcd\\src",
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino",
                 "C:\\Program Files (x86)\\Arduino\\**",
-                "C:\\Users\\trohl\\Documents\\Arduino\\libraries\\**",
                 "${workspaceFolder}"
             ],
             "defines": [

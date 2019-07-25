@@ -163,14 +163,23 @@ void dataReceived(int howMany){
 	}
 
 	int iDelimPos = LED.indexOf(",");
-	String ParmStatus = LED.substring(1,iDelimPos);
-	String ParmAlliance = LED.substring(iDelimPos+1);
+	String ParmStatus = "";
+	String ParmAlliance = "";
+	Serial.println(LED);
+	if (iDelimPos == 0) {
+		ParmStatus = LED.substring(1,3);
+	} else {
+		ParmStatus = LED.substring(1,3);
+		ParmAlliance = LED.substring(iDelimPos+1);
+	}
+	Serial.println(ParmStatus);
+	Serial.println(ParmAlliance);
 
-	if (ParmStatus == "DISABLED"){
+	if (ParmStatus == "DIS"){
 		LEDmode = 1;
-	}else if (ParmStatus== "AUTO"){
+	}else if (ParmStatus== "AUT"){
 		LEDmode = 2;
-	}else if (ParmStatus == "TELEOP"){
+	}else if (ParmStatus == "TELP"){
 		LEDmode = 3; 
 	}else{
 		LEDmode = 0;
