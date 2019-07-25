@@ -107,6 +107,7 @@ void setup()
 
 void loop()
 {
+	// Serial.println("loop");
 	Wire.onReceive(dataReceived);
 	/*redState = digitalRead(redSwitch);
 	blueState = digitalRead(blueSwitch);
@@ -139,13 +140,13 @@ void loop()
 		color_chase(AllianceRGB, 100);
 		break;
 	case 1: // DISABLED
-		color_chase(AllianceRGB, 125);	
+		color_chase(AllianceRGB, 250);	
 		break;
 	case 2: // AUTO
 		color_chase(AllianceRGB, 75);	
 		break;
 	case 3: // TELEOP
-		color_chase(AllianceRGB, 25);	
+		color_chase(AllianceRGB, 60);	
 		break;
 	default: // ANOTHER THING BROKE
 		color_chase(AllianceRGB, 15);
@@ -154,6 +155,7 @@ void loop()
 }
 
 void dataReceived(int howMany){
+	Serial.println("dataRecived");
 	String LED = "";
 	while (Wire.available()){
 		char n = (char)Wire.read();
@@ -167,19 +169,19 @@ void dataReceived(int howMany){
 	String ParmAlliance = "";
 	Serial.println(LED);
 	if (iDelimPos == 0) {
-		ParmStatus = LED.substring(1,3);
+		ParmStatus = LED.substring(0);
 	} else {
-		ParmStatus = LED.substring(1,3);
+		ParmStatus = LED.substring(0,iDelimPos);
 		ParmAlliance = LED.substring(iDelimPos+1);
 	}
 	Serial.println(ParmStatus);
 	Serial.println(ParmAlliance);
 
-	if (ParmStatus == "DIS"){
+	if (ParmStatus == "DISABLED"){
 		LEDmode = 1;
-	}else if (ParmStatus== "AUT"){
+	}else if (ParmStatus== "AUTO"){
 		LEDmode = 2;
-	}else if (ParmStatus == "TELP"){
+	}else if (ParmStatus == "TELEOP"){
 		LEDmode = 3; 
 	}else{
 		LEDmode = 0;
@@ -211,7 +213,7 @@ void color_chase(uint32_t color, uint8_t wait)
 	{
 		// Turn our current led ON, then show the leds
 
-		if (led_number % 4 == LEDRotationCurr) {
+		if (led_number % 4 != LEDRotationCurr) {
 			leds[led_number] = color;
 		} else {
 			leds[led_number] = CRGB::DarkGreen;
