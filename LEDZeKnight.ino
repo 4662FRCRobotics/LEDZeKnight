@@ -122,7 +122,7 @@ void loop()
 
 	switch (AllianceColor){
 		case 0: // INVALID
-			AllianceRGB = CRGB::Orange;
+			AllianceRGB = 0x00FF00;
 			break;
 		case 1: // BLUE
 			AllianceRGB = CRGB::Blue;
